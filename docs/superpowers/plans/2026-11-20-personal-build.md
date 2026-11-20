@@ -23,13 +23,25 @@
 - Hardware access can differ inside the sandbox; validate on the actual host.
 
 ## Task 1: Build and enforce personal policy
-- [ ] Add a personal policy regression test and observe the upstream behavior fail the personal expectation.
-- [ ] Add the minimum compile-time guards and a reproducible PowerShell build script.
-- [ ] Compile the application and run relevant existing tests and the personal policy tests.
-- [ ] Inspect executable imports and run a local Defender scan where available.
+- [x] Add a personal policy regression test and observe the upstream behavior fail the personal expectation.
+- [x] Add the minimum compile-time guards and a reproducible PowerShell build script.
+- [x] Compile the application and run relevant existing tests and the personal policy tests.
+- [x] Inspect executable imports and run a local Defender scan where available.
 
 ## Task 2: Publish and verify hardware
-- [ ] Commit source, design, plan, and review notes; push `personal-v1.1.0` to the user's fork.
-- [ ] Run the personal executable's local JSON discovery and verify the three devices.
-- [ ] Launch the portable widget and verify its visible state.
-- [ ] Record the binary SHA-256, validation results and remaining limitations.
+- [x] Commit source, design, plan, and review notes; push `personal-v1.1.0` to the user's fork.
+- [x] Run the personal executable's local JSON discovery and verify the three devices.
+- [x] Launch the portable widget and verify its visible state.
+- [x] Record the binary SHA-256, validation results and remaining limitations.
+
+## Execution ledger
+
+Task 1: complete; policy regressions observed failing before guards, then passing. Selected local suite: 18/18 checks passed. Defender reported no threats; local binary is unsigned.
+
+Ruling: an isolated new clone was used instead of an additional worktree, because no existing project checkout needed protection.
+
+Ruling: use the installed Microsoft compiler instead of installing MinGW; two equivalent driver syntax changes were needed for that compiler. Cost if incorrect: compatibility outside the tested Windows toolchain; the original MinGW integer-reference spelling is preserved under its compiler path.
+
+Final review: a separate reviewer identified four lifecycle/documentation issues; all were addressed. A regression test caught cache cleanup and apply-mode fallthrough before the fixes, then passed. Standalone command exit checks passed after the report-loop fix.
+
+Task 2: complete; source published at `bf2369a`; local discovery verified all three devices. Portable widget is running. The user's initial screenshot showed a stale disconnected headset; widget restarted after live discovery succeeded. The user confirmed the live headset percentage was visible after restart. Clean GitHub runner build, selected tests and portable artifact upload succeeded in run `44737652179`.

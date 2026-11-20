@@ -11,7 +11,8 @@ Base: upstream v1.1.0, `7cc44f2b2c63341e2b478463c7467759837a74a9`.
 - Microsoft Defender custom scan of the locally built executable reported no threats.
 - Authenticode status: NotSigned (locally compiled personal executable).
 - `git diff --check` passed.
-- Local hardware discovery found Logitech PRO X Wireless, Logitech PRO X TKL and the HyperX Cloud III Wireless receiver. Mouse and keyboard returned numeric battery readings. The initial headset query reported a disconnected wireless link; its live battery reading still needs confirmation with the headset on.
+- Local hardware discovery returned numeric battery readings for Logitech PRO X Wireless, Logitech PRO X TKL and HyperX Cloud III Wireless. The keyboard also reported charging. The initial headset query reported a disconnected link; after the headset was switched on, it returned a valid percentage. The user initially saw the old disconnected state in the widget; restarting the widget refreshed it, and the user confirmed the headset percentage was visible.
+- A clean Windows GitHub Actions build, all selected regression checks and portable artifact upload succeeded for source commit `bf2369a59375892e02ea15f4e2230960bac8cad3`: https://github.com/SAHBAZ24/Wireless-Device-Battery-Monitor/actions/runs/44737652179
 
 ## Review and fixes
 
