@@ -317,6 +317,9 @@ std::string RequestJson(const Request& r) {
 
 // POSTs the JSON body. Returns the HTTP status (0 = could not reach the server) and the reply body.
 int Post(const std::string& body, std::string& reply) {
+#ifdef WB_PERSONAL_BUILD
+    return 0; // Personal builds do not transmit device reports, including explicit requests.
+#endif
     int status = 0;
     HINTERNET s = WinHttpOpen(L"WirelessBattery", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
     if (!s) return 0;
@@ -675,6 +678,10 @@ LRESULT CALLBACK WndProc(HWND h, UINT msg, WPARAM wp, LPARAM lp) {
 namespace report {
 
 void Show(HINSTANCE inst, HWND owner) {
+#ifdef WB_PERSONAL_BUILD
+    MessageBoxW(owner, L"Device report submission is disabled in this personal build.", L"BatteryHub Personal", MB_OK | MB_ICONINFORMATION);
+    return;
+#endif
     if (g_wnd) {
         ShowWindow(g_wnd, SW_RESTORE);
         SetForegroundWindow(g_wnd);

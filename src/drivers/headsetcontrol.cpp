@@ -121,6 +121,9 @@ std::wstring FindExe() {
 
 // Runs the command line and returns its stdout (empty on failure or after `timeoutMs`).
 std::string Run(std::wstring cmd, int timeoutMs) {
+#ifdef WB_PERSONAL_BUILD
+    return {}; // Use built-in drivers; do not run an executable found beside the app or on PATH.
+#endif
     SECURITY_ATTRIBUTES sa{ sizeof(sa), nullptr, TRUE };
     HANDLE rd, wr;
     if (!CreatePipe(&rd, &wr, &sa, 0)) return "";
@@ -229,6 +232,9 @@ DWORD WINAPI RefreshThread(LPVOID) {
 }  // namespace
 
 void PollHeadsetControl(PollContext& ctx) {
+#ifdef WB_PERSONAL_BUILD
+    return;
+#endif
     if (Command().empty()) return;
     ULONGLONG now = GetTickCount64();
     if (g_updated == 0) {

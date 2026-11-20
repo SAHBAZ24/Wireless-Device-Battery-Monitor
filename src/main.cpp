@@ -915,10 +915,14 @@ void ShowMenu() {
     }
     AppendMenuW(m, MF_STRING, ID_REFRESH, T(L"Refresh now"));
     AppendMenuW(m, MF_STRING | (AutostartEnabled() ? MF_CHECKED : 0), ID_AUTOSTART, T(L"Start with Windows"));
+#ifdef WB_PERSONAL_BUILD
+    AppendMenuW(m, MF_STRING | MF_GRAYED, ID_REPORT, L"Device reports disabled (Personal)");
+#else
     AppendMenuW(m, MF_STRING, ID_REPORT, T(L"Request support for a device..."));
+#endif
     AppendMenuW(m, MF_STRING, ID_SUPPORT, T(L"Support the project..."));
     AppendMenuW(m, MF_SEPARATOR, 0, nullptr);
-    AppendMenuW(m, MF_STRING | (updates::Busy() ? MF_GRAYED : 0), ID_UPDATE, updates::MenuLabel().c_str());
+    AppendMenuW(m, MF_STRING | (updates::Busy() || !updates::Supported() ? MF_GRAYED : 0), ID_UPDATE, updates::MenuLabel().c_str());
     UINT updateFlags = MF_STRING | (updates::AutomaticEnabled() ? MF_CHECKED : 0) |
                        (updates::Supported() ? 0 : MF_GRAYED);
     AppendMenuW(m, updateFlags, ID_AUTO_UPDATE, T(L"Automatically check for updates"));
@@ -1212,6 +1216,9 @@ int WINAPI wWinMain(HINSTANCE inst, HINSTANCE, PWSTR cmdLine, int) {
     if (cmdLine && wcsstr(cmdLine, L"--list")) return ListToConsole(false);
     if (cmdLine && wcsstr(cmdLine, L"--dump")) return ListToConsole(true);
     if (cmdLine && wcsstr(cmdLine, L"--report")) {  // the "Request support for a device" window on its own
+#ifdef WB_PERSONAL_BUILD
+        return 2; // Disabled standalone commands must not enter a message loop without a window.
+#endif
         i18n::Init();
         report::Show(inst, nullptr);
         MSG msg;

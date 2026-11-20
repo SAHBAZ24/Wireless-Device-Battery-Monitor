@@ -1,5 +1,11 @@
 # BatteryHub
 
+> **Personal fork (2026-11-20):** use branch `personal-v1.1.0`, based on upstream v1.1.0 (`7cc44f2b2c63341e2b478463c7467759837a74a9`).
+> Build with `./scripts/build-personal.ps1` in PowerShell using Microsoft C++ Build Tools (x64 C++ compiler and Windows SDK).
+> The portable executable is `build/personal/BatteryHub.exe`. This build disables upstream updates, device-report submission and the optional external HeadsetControl helper.
+> The upstream installer links and ordinary `build.bat` / `make` instructions below **do not produce this protected personal build**.
+> See [PERSONAL.md](PERSONAL.md) for the scope, tests and limitations. Original licensing and attribution are preserved.
+
 *Formerly **Wireless Battery**. Version 1.1.0 renamed the app; an update keeps your settings, startup choice and battery history.*
 
 [![Support me on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20me-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/krisgfx)

@@ -114,6 +114,9 @@ bool StartApply(HWND owner, const std::wstring& installer, const ReleaseInfo& re
 }
 
 int RunApplyMode(int argc, wchar_t** argv) {
+#ifdef WB_PERSONAL_BUILD
+    return argc >= 2 && wcscmp(argv[1], L"--apply-update") == 0 ? 2 : -1;
+#endif
     if (argc < 2 || wcscmp(argv[1], L"--apply-update") != 0) return -1;
     if (argc != 8) return 2;
     i18n::Init();  // the helper runs before the normal startup, so its messages need the language too

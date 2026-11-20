@@ -1,0 +1,31 @@
+name: Personal portable build
+on:
+  push:
+    branches: [personal-v1.1.0]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  personal:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Compile personal executable and enforce personal policy
+        shell: pwsh
+        run: ./scripts/build-personal.ps1
+      - name: Run regression suite and disabled-command checks
+        shell: pwsh
+        run: ./scripts/build-personal.ps1 -TestSuiteOnly
+      - name: Package portable executable with license and provenance
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build/personal/package | Out-Null
+          Copy-Item build/personal/BatteryHub.exe, LICENSE, PERSONAL.md build/personal/package
+          "Fork source: $env:GITHUB_SHA`nUpstream base: 7cc44f2b2c63341e2b478463c7467759837a74a9`nWB_PERSONAL_BUILD=1" | Set-Content build/personal/package/BUILD-INFO.txt
+          $hash = (Get-FileHash build/personal/package/BatteryHub.exe -Algorithm SHA256).Hash.ToLower()
+          "$hash  BatteryHub.exe" | Set-Content build/personal/package/SHA256SUMS.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: BatteryHub-Personal
+          path: build/personal/package/*
+          if-no-files-found: error

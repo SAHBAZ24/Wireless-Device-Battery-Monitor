@@ -216,6 +216,9 @@ void CleanOldDownloads() {
 }
 
 void Initialize() {
+#ifdef WB_PERSONAL_BUILD
+    return; // Do not clean or change updater state shared with an upstream installation.
+#endif
     CleanOldDownloads();
     started = GetTickCount64();
     DWORD enabled = 1, size = sizeof(enabled);
